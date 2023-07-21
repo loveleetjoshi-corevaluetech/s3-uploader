@@ -1,0 +1,19 @@
+# Ignore node_modules directory
+node_modules/
+
+# Ignore environment-specific files
+.env
+.env.local
+.env.*.local
+
+# Ignore build output and temporary files
+build/
+dist/
+temp/
+
+# Ignore log files
+*.log
+
+# Ignore editor-specific files and directories
+.vscode/
+.idea/

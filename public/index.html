@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Simple S3 Uploader</title>
+
+  <style>
+    .uploadBtn {
+      cursor: pointer;
+    }
+
+    .uploadBtn:disabled {
+      cursor: default;
+      opacity: 0.5;
+    }
+  </style>
+</head>
+
+<body>
+  <h1>Simple S3 File Upload</h1>
+
+  <label for="selectUploadType">Select Upload Type:</label>
+  <select name="selectUploadType" id="selectUploadType">
+    <option value="fileInput" selected>Upload File</option>
+    <option value="folderInput">Upload Folder</option>
+  </select>
+
+  <br>
+  <br>
+  <br>
+
+  <input type="file" id="fileInput" multiple />
+
+  <button class="uploadBtn" onclick="uploadFile()">Upload</button>
+
+  <p id="status"></p>
+  <div id="fileUrls"></div>
+
+  <script>
+    const selectUploadTypeElement = document.querySelector('#selectUploadType');
+    const uploadBtnElement = document.querySelector('.uploadBtn');
+    const fileInput = document.getElementById('fileInput');
+
+    selectUploadTypeElement.addEventListener('change', handleUploadTypeChange);
+
+    function handleUploadTypeChange(e) {
+      const uploadTypeValue = e?.target?.value;
+
+      if (uploadTypeValue === 'folderInput') {
+        fileInput.setAttribute('webkitdirectory', true);
+        fileInput.setAttribute('directory', true);
+        fileInput.removeAttribute('multiple');
+      } else {
+        fileInput.removeAttribute('webkitdirectory');
+        fileInput.removeAttribute('directory');
+        fileInput.setAttribute('multiple', true);
+      }
+    }
+
+    async function uploadFile() {
+      try {
+        const files = fileInput.files;
+
+        // Check is any file/folder selected
+        if (!files.length) {
+          alert('Please select a file.');
+          return;
+        }
+
+        uploadBtnElement.setAttribute('disabled', true);
+
+        const formData = new FormData();
+
+        for (const file of files) {
+          formData.append('files', file);
+        }
+
+        const response = await fetch('/upload', {
+          method: 'POST',
+          body: formData,
+        });
+
+        const data = await response.json();
+
+        if (response.ok) {
+          document.getElementById('status').textContent = 'Files uploaded successfully.';
+          const fileUrlsDiv = document.getElementById('fileUrls');
+          fileUrlsDiv.innerHTML = '';
+          data.fileUrls.forEach(url => {
+            fileUrlsDiv.innerHTML += `<a href="${url}" target="_blank">Download File</a><br>`;
+          });
+        } else {
+          document.getElementById('status').textContent = 'File upload failed.';
+        }
+
+        // Reset the file inputs after submission
+        fileInput.value = '';
+      } catch (error) {
+        console.log(error);
+      } finally {
+        uploadBtnElement.removeAttribute('disabled');
+      }
+    }
+  </script>
+</body>
+
+</html>
