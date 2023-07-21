@@ -7,7 +7,7 @@ const dotenv = require("dotenv");
 dotenv.config();
 
 const app = express();
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 80;
 
 AWS.config.update({
   accessKeyId: process.env.AWS_ACCESS_KEY_ID,
