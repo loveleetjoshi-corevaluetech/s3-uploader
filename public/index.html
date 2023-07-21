@@ -34,7 +34,7 @@
   <button class="uploadBtn" onclick="uploadFile()">Upload</button>
 
   <p id="status"></p>
-  <div id="fileUrls"></div>
+<!--   <div id="fileUrls"></div> -->
 
   <script>
     const selectUploadTypeElement = document.querySelector('#selectUploadType');
@@ -84,11 +84,11 @@
 
         if (response.ok) {
           document.getElementById('status').textContent = 'Files uploaded successfully.';
-          const fileUrlsDiv = document.getElementById('fileUrls');
-          fileUrlsDiv.innerHTML = '';
-          data.fileUrls.forEach(url => {
-            fileUrlsDiv.innerHTML += `<a href="${url}" target="_blank">Download File</a><br>`;
-          });
+          // const fileUrlsDiv = document.getElementById('fileUrls');
+          // fileUrlsDiv.innerHTML = '';
+          // data.fileUrls.forEach(url => {
+          //   fileUrlsDiv.innerHTML += `<a href="${url}" target="_blank">Download File</a><br>`;
+          // });
         } else {
           document.getElementById('status').textContent = 'File upload failed.';
         }
