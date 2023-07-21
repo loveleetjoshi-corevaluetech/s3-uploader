@@ -5,6 +5,11 @@
   <title>Simple S3 Uploader</title>
 
   <style>
+    .navbar {
+      display: flex;
+      justify-content: end;
+    }
+
     .uploadBtn {
       cursor: pointer;
     }
@@ -17,6 +22,9 @@
 </head>
 
 <body>
+  <nav class="navbar">
+    <button class="logout-btn" onclick="logout()">Logout</button>
+  </nav>
   <h1>Simple S3 File Upload</h1>
 
   <label for="selectUploadType">Select Upload Type:</label>
@@ -34,7 +42,7 @@
   <button class="uploadBtn" onclick="uploadFile()">Upload</button>
 
   <p id="status"></p>
-<!--   <div id="fileUrls"></div> -->
+  <!-- <div id="fileUrls"></div> -->
 
   <script>
     const selectUploadTypeElement = document.querySelector('#selectUploadType');
@@ -101,6 +109,27 @@
         uploadBtnElement.removeAttribute('disabled');
       }
     }
+
+    // Logout handler
+    async function logout() {
+      const response = await fetch('/logout', { method: 'GET' });
+      if (response.ok) {
+        window.location.href = 'login.html';
+      }
+    }
+
+    async function checkAuthentication() {
+      const response = await fetch('/checkAuth', { method: 'GET' });
+      const data = await response.json();
+      if (response.ok && data.authenticated) {
+        // User is authenticated, do nothing
+      } else {
+        window.location.href = 'login.html';
+      }
+    }
+
+    // Check authentication status when the page loads
+    checkAuthentication();
   </script>
 </body>
 
