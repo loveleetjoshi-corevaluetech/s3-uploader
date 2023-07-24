@@ -4,60 +4,129 @@
 <head>
     <title>Login Page</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            height: 100vh;
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
 
-        .login-form {
+        :root {
+            --primary: #33a2ff;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f2f2f2;
+            margin: 0;
+        }
+
+        .login-container {
+            background-color: #ffffff;
             border: 1px solid #ccc;
-            padding: 20px;
-            max-width: 300px;
+            padding: 4rem;
             text-align: center;
+            border-radius: 5px;
+            /* width: 30rem; */
+            width: 36vw;
+            max-width: 50rem;
+        }
+
+        .login-container h2 {
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+
+        .login-container input {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        .login-container button {
+            width: 100%;
+            padding: 10px;
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .login-container button:hover {
+            background-color: var(--primary);
+        }
+
+        .login-container button:disabled {
+            cursor: default;
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .login-error {
+            color: red;
+            margin-top: 10px;
+        }
+
+        @media (max-width: 1200px) {
+            .login-container {
+                width: 55vw;
+            }
         }
     </style>
 </head>
 
 <body>
-    <div class="login-form">
-        <h2>Login</h2>
+    <div class="login-container">
+        <h2>Welcome to CoreValue file uploader</h2>
         <form onsubmit="authenticate(event)" action="#">
-            <div>
-                <input type="text" id="username" placeholder="Username" required>
-            </div>
+            <!-- <input type="text" id="username" placeholder="Username" required> -->
             <br>
-            <div>
-                <input type="password" id="password" placeholder="Password" required>
-            </div>
+            <input type="password" id="password" placeholder="Password" required>
             <br>
-            <button type="submit">Login</button>
+            <button id="login-btn" type="submit">Login</button>
+            <div class="login-error" id="login-error"></div>
         </form>
     </div>
 
     <script>
         async function authenticate(event) {
-            event.preventDefault(); // Prevent form submission
+            const loginBtn = document.getElementById('login-btn');
+            try {
+                event.preventDefault(); // Prevent form submission
 
-            const username = document.getElementById('username').value;
-            const password = document.getElementById('password').value;
+                const username = 'admin';
+                const password = document.getElementById('password').value;
 
-            const response = await fetch('/login', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ username, password })
-            });
+                loginBtn.setAttribute('disabled', true);
 
-            const data = await response.json();
-            if (response.ok) {
-                window.location.href = 'index.html'; // Redirect to index.html on success
-            } else {
-                alert('Invalid username or password. Please try again.');
+
+                const response = await fetch('/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ username, password })
+                });
+
+                const data = await response.json();
+                const loginErrorDiv = document.getElementById('login-error');
+                loginErrorDiv.innerText = '';
+
+                if (response.ok) {
+                    window.location.href = 'index.html'; // Redirect to index.html on success
+                } else {
+                    loginErrorDiv.innerText = 'Invalid password. Please try again.';
+                }
+            } catch (error) {
+                console.log(error);
+            } finally {
+                loginBtn.removeAttribute('disabled');
             }
         }
     </script>
