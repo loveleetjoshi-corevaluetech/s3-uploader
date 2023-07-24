@@ -326,6 +326,8 @@ opacity */
         fileInput.value = '';
       } catch (error) {
         console.log(error);
+        uploadStatusTextElement.classList.remove('upload-text--success');
+        uploadStatusTextElement.textContent = 'File upload failed.';
       } finally {
         // Reset the upload status after upload is complete
         isUploading = false;
