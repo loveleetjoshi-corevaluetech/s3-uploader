@@ -234,6 +234,7 @@ opacity */
     const uploadBtnElement = document.querySelector('.uploadBtn');
     const fileInput = document.getElementById('fileInput');
     const fileInputLabel = document.querySelector('#fileInput+label');
+    const uploadStatusTextElement = document.getElementById('status');
 
     // Event listners
     selectUploadTypeElement.addEventListener('change', handleUploadTypeChange);
@@ -290,6 +291,7 @@ opacity */
         uploadBtnElement.setAttribute('disabled', true);
         fileInput.setAttribute('disabled', true);
         progressContainerElement.style.display = 'block';
+        uploadStatusTextElement.textContent = '';
 
         const formData = new FormData();
 
@@ -307,7 +309,6 @@ opacity */
         const data = await response.json();
 
         if (response.ok) {
-          const uploadStatusTextElement = document.getElementById('status');
           uploadStatusTextElement.textContent = 'Files uploaded successfully.';
           uploadStatusTextElement.classList.add('upload-text--success');
           uploadStatusTextElement.classList.remove('upload-text--error');
