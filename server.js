@@ -21,7 +21,7 @@ app.use(session({
 
 // Middleware to check authentication status and redirect if not logged in
 function checkAuth(req, res, next) {
-  console.log(req);
+  // console.log(req);
   if (!req.session.authenticated) {
     res.redirect('/login.html');
   } else {
